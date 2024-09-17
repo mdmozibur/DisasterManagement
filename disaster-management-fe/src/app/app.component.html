@@ -1,0 +1,20 @@
+<nz-layout>
+  <nz-sider [(nzCollapsed)]="isCollapsed">
+    <div class="sidebar-logo">
+      <span style="cursor: pointer;" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" (click)="isCollapsed = !isCollapsed"></span>
+      <h1>Ant Design Of Angular</h1>
+    </div>
+    <ul nz-menu [nzInlineCollapsed]="isCollapsed">
+      <li nz-menu-item nzSelected nzMatchRouter [routerLink]="['/home']">Home</li>
+      <li nz-menu-item nzMatchRouter [routerLink]="['/donation']">Donation</li>
+      <li nz-menu-item nzMatchRouter [routerLink]="['/crisis']">Crisis</li>
+      <li nz-menu-item nzMatchRouter [routerLink]="['/volunteer']">Volunteer</li>
+      <li nz-menu-item nzMatchRouter [routerLink]="['/inventory']">Inventory</li>
+      <li nz-menu-item nzMatchRouter [routerLink]="['/admin']">Admin</li>
+    </ul>
+  </nz-sider>
+  <nz-content>
+    <router-outlet></router-outlet>
+  </nz-content>
+
+</nz-layout>
