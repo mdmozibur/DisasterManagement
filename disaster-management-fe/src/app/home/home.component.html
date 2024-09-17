@@ -1,0 +1,9 @@
+<div>
+    <nz-statistic [nzValue]="(donationAmount | number)!" [nzTitle]="'Donation amount'"></nz-statistic>
+    <apx-chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [xaxis]="chartOptions.xaxis"
+    [title]="chartOptions.title"
+  ></apx-chart>
+</div>

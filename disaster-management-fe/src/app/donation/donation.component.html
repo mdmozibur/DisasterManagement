@@ -1,0 +1,20 @@
+<div class="center-div">
+    <form class="vertical-stackpanel" method="post" onsubmit="donateSubmit()">
+        <h1>Donate now, save lives.</h1>
+        <label>
+            Amount *
+            <nz-input-number-group nzPrefix="৳" style="width: 100%">
+              <nz-input-number name="amountInput" required [nzStep]="10" nzMin="10" nzPlaceHolder="Enter the donation amount" [(ngModel)]="amount" (change)="checkFormValidity()"></nz-input-number>
+            </nz-input-number-group>
+        </label>
+        <label>
+            Name *
+            <input nz-input placeholder="Your name" required name="nameInput" [(ngModel)]="name" (input)="checkFormValidity()">
+        </label>
+        <label>
+            Address
+            <input nz-input placeholder="Your address" name="nameInput" [(ngModel)]="address">
+        </label>
+        <button type="submit" [nzType]="'primary'" nz-button [disabled]="!isFormValid">Donate</button>
+    </form>
+</div>
