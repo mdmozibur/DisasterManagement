@@ -6,7 +6,7 @@
       <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/crisis']">Crisis</li>
       <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/volunteer']">Volunteer</li>
       <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/inventory']">Inventory</li>
-      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/admin']">Admin</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/admin']" *ngIf="auths.isAdmin">Admin</li>
     </ul>
   </nz-header>
   <nz-sider *ngIf="!isHorizontal" nzTheme="light">
@@ -16,12 +16,19 @@
       <li nz-menu-item nzMatchRouter [routerLink]="['/crisis']">Crisis</li>
       <li nz-menu-item nzMatchRouter [routerLink]="['/volunteer']">Volunteer</li>
       <li nz-menu-item nzMatchRouter [routerLink]="['/inventory']">Inventory</li>
-      <li nz-menu-item nzMatchRouter [routerLink]="['/admin']">Admin</li>
+      <li *ngIf="auths.isAdmin" nz-menu-item nzMatchRouter [routerLink]="['/admin']">Admin</li>
     </ul>
-
-    <div style="position: absolute; bottom: 0; padding-left: 10px; padding-bottom: 5px; width: 100%;">
-      <button nz-button nzType="primary" style="margin: auto;" [routerLink]="['/login']">Log in</button>
-    </div>
+    @if (auths.userId < 1) {
+      <div class="auth-section">
+        <a style="margin: auto;" href="login">Log in</a> or <a style="margin: auto;" href="register">Sign up</a>
+      </div>
+    }
+    @else {
+      <div class="auth-section">
+        Logged in as {{auths.name}}. <br> 
+        <a href="profile">Profile</a>
+      </div>
+    }
   </nz-sider>
   <nz-content>
     <router-outlet></router-outlet>

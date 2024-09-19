@@ -18,3 +18,12 @@ nz-sider{
 .pad-0{
     padding: 0;
 }
+
+.auth-section{
+    position: absolute; 
+    bottom: 0; 
+    padding-bottom: 5px; 
+    width: 100%; 
+    display: flex; 
+    justify-content: space-evenly;
+}

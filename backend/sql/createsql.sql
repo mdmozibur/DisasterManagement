@@ -25,10 +25,12 @@ create table if not exists Users
 (
 id serial primary key,
 created_at timestamp default now() not null,
+name varchar(100) not null,
 email varchar(250) not null unique,
 password varchar(250) not null,
 is_admin boolean not null default false
 );
+
 
 
 

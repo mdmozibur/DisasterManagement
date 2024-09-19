@@ -1,1 +1,34 @@
-<p>admin works!</p>
+<ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectedItem = 'volunteer'">
+        Volunteer
+    </li>
+    <li nz-menu-item (click)="selectedItem = 'crisis'">
+        Crisis
+    </li>
+    <li nz-menu-item (click)="selectedItem = 'report'">
+        Report
+    </li>
+</ul>
+
+
+<nz-list nzItemLayout="horizontal" [nzLoading]="isDataLoading">
+    @for (item of crisisData; track item) {
+      <nz-list-item>
+        <nz-list-item-meta >
+            <nz-list-item-meta-description>
+                <p>{{item.incident}}</p>
+                <strong>Status : {{item.status}}</strong><br>
+                <strong>Severity : {{item.severity}}</strong>
+            </nz-list-item-meta-description>
+            <nz-list-item-meta-title>
+                <strong>Location: </strong>{{item.location}}
+            </nz-list-item-meta-title>
+        </nz-list-item-meta>
+        <nz-list-item-extra>
+        </nz-list-item-extra>
+      </nz-list-item>
+    }
+    @if (crisisData.length === 0) {
+      <nz-list-empty />
+    }
+</nz-list>

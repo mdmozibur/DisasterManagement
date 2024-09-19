@@ -16,7 +16,7 @@ module.exports = {
 
         try {
             const [results, metadata] = 
-                await dbs.query('select id, password, is_admin from Users where email = :mail', {
+                await dbs.query('select id, name, password, is_admin from Users where email = :mail', {
                     replacements : {
                         mail : body.email
                     },
@@ -29,6 +29,7 @@ module.exports = {
                     if(result == true){
                         res.status(200).json({
                             id : results.id,
+                            name : results.name,
                             is_admin : results.is_admin
                         });
                     }
@@ -50,7 +51,7 @@ module.exports = {
     // get only the reports that has been approved by admin
     register : async (req, res) => {
         let body = req.body;
-        if(!body || !body.password || !body.email){
+        if(!body || !body.password || !body.email || !body.name){
             res.status(500).json({
                 status: 'no data provided',
                 message: 'no data provided'
@@ -58,24 +59,31 @@ module.exports = {
             return;
         }
 
-        try {
-
-            bcrypt.hash(body.password, saltRounds).then(async function(hash) {
+        bcrypt.hash(body.password, saltRounds).then(async function(hash) {
+            try {
                 const [results, metadata] = 
-                await dbs.query('insert into Users (email, password) values (:mail, :pass)', {
+                await dbs.query('insert into Users (email, password, name) values (:mail, :pass, :nm)', {
                     replacements : {
                         mail : body.email,
-                        pass : hash
+                        pass : hash,
+                        nm : body.name
                     },
                     type : QueryTypes.INSERT
                 });
-                res.status(200).send('success');
-            });
-        } catch (error) {
-            res.status(500).json({
-                status: 'failure',
-                message: error
-            });
-        }
+                res.status(200).send('success');        
+            } 
+            catch (error) {
+                if(error.name === 'SequelizeUniqueConstraintError'){
+                    res.status(400).json({
+                        errorMessage: error.errors[0].message
+                    });
+                    return;
+                }
+                res.status(500).json({
+                    status: 'failure',
+                    message: error.message
+                });
+            }
+        });
     }
 }

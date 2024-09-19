@@ -5,6 +5,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CommonModule } from '@angular/common';
 import { DatabaseService } from '../database.service';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +22,7 @@ export class LoginComponent {
   passwordVisible = false;
   isFormValid = false;
 
-  constructor(private dbs : DatabaseService){
+  constructor(private dbs : DatabaseService, private auths : AuthService, private router : Router){
 
   }
 
@@ -44,6 +46,11 @@ export class LoginComponent {
       email : this.email,
       password : this.password
     }));
-    console.log(res);
+
+    if(res.ok){
+      let authDetail = await res.json();
+      this.auths.Login(authDetail);
+      this.router.navigateByUrl('/home');
+    }
   }
 }

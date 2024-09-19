@@ -6,6 +6,7 @@ import { RouterOutlet } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,7 @@ export class AppComponent {
     this.isHorizontal = window.innerWidth < 600;
   }
 
-  constructor(){
+  constructor(public auths : AuthService){
     this.onResize();  
   }
 }

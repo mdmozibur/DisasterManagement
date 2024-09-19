@@ -1,9 +1,15 @@
 
 <form class="vertical-stackpanel" style="width: calc(min(90%, 600px)); margin: auto" method="post">
-    <h2>Sign up</h2>
+    <h2>Sign up</h2>    
+    <label>
+      <div style="display: flex; justify-content: space-between;">
+          Name * <small><i>   {{name.length}} / 4</i></small>
+      </div>
+      <input nz-input name="nameInput" required placeholder="John Doe" [disabled]="isRegistrationOngoing" [(ngModel)]="name" (input)="checkName()">
+  </label>
     <label>
         Email
-        <input nz-input name="emailInput" required placeholder="abc@example.com" [(ngModel)]="email" (input)="checkFormValidity()">
+        <input nz-input name="emailInput" required placeholder="abc@example.com"  [disabled]="isRegistrationOngoing" [(ngModel)]="email" (input)="checkEmail()">
     </label>
     <label>
         Password
@@ -11,9 +17,11 @@
             <input
               [type]="passwordVisible ? 'text' : 'password'"
               nz-input
+              [disabled]="isRegistrationOngoing"
               name="password1"
+              required
               placeholder="input password"
-              (input)="checkFormValidity()"
+              (input)="checkPassword()"
               [(ngModel)]="password"
             />
           </nz-input-group>
@@ -31,8 +39,10 @@
             <input
               [type]="password2Visible ? 'text' : 'password'"
               nz-input
+              [disabled]="isRegistrationOngoing"
               name="password2"
-              (input)="checkFormValidity()"
+              required
+              (input)="checkPassword()"
               placeholder="retype password"
               [(ngModel)]="password2"
             />
@@ -50,6 +60,13 @@
         <p>
             Already have an account? <a href="login">Login</a>
         </p>
-        <button nz-button type="submit" nzType="primary" (click)="registerClick()" [disabled]="!isFormValid">SignUp</button>
+        <button nz-button type="submit" nzType="primary" (click)="registerClick()" [disabled]="!isFormValid" [nzLoading]="isRegistrationOngoing">SignUp</button>
     </div>
 </form>
+
+<div style="color: red; display: flex; flex-direction: column; width: calc(min(90%, 600px)); margin: auto ">
+  <i *ngIf="!isNameValid">* Name must be at least 4 character long</i>
+  <i *ngIf="!isEmailValid">* Must be a valid email</i>
+  <i *ngIf="!isPasswordLengthyEnough">* Password must be at least 8 character long</i>
+  <i *ngIf="!isPasswordMatching">* Passwords must match</i>
+</div>
