@@ -1,1 +1,55 @@
-<p>register works!</p>
+
+<form class="vertical-stackpanel" style="width: calc(min(90%, 600px)); margin: auto" method="post">
+    <h2>Sign up</h2>
+    <label>
+        Email
+        <input nz-input name="emailInput" required placeholder="abc@example.com" [(ngModel)]="email" (input)="checkFormValidity()">
+    </label>
+    <label>
+        Password
+        <nz-input-group [nzSuffix]="suffixTemplate">
+            <input
+              [type]="passwordVisible ? 'text' : 'password'"
+              nz-input
+              name="password1"
+              placeholder="input password"
+              (input)="checkFormValidity()"
+              [(ngModel)]="password"
+            />
+          </nz-input-group>
+          <ng-template #suffixTemplate>
+            <span
+              nz-icon
+              [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+              (click)="passwordVisible = !passwordVisible"
+            ></span>
+          </ng-template>
+    </label>
+    <label>
+        Retype password
+        <nz-input-group [nzSuffix]="suffixTemplate2">
+            <input
+              [type]="password2Visible ? 'text' : 'password'"
+              nz-input
+              name="password2"
+              (input)="checkFormValidity()"
+              placeholder="retype password"
+              [(ngModel)]="password2"
+            />
+          </nz-input-group>
+          <ng-template #suffixTemplate2>
+            <span
+              nz-icon
+              [nzType]="password2Visible ? 'eye-invisible' : 'eye'"
+              (click)="password2Visible = !password2Visible"
+            ></span>
+          </ng-template>
+    </label>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <p>
+            Already have an account? <a href="login">Login</a>
+        </p>
+        <button nz-button type="submit" nzType="primary" (click)="registerClick()" [disabled]="!isFormValid">SignUp</button>
+    </div>
+</form>

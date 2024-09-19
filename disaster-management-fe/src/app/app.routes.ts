@@ -5,6 +5,8 @@ import { CrisisComponent } from './crisis/crisis.component';
 import { VolunteerComponent } from './volunteer/volunteer.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { AdminComponent } from './admin/admin.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 export const routes: Routes = [
     { path: 'home', component: HomeComponent},
@@ -13,4 +15,6 @@ export const routes: Routes = [
     { path: 'volunteer', component: VolunteerComponent},
     { path: 'inventory', component: InventoryComponent},
     { path: 'admin', component: AdminComponent},
+    { path: 'login', component: LoginComponent},
+    { path: 'register', component: RegisterComponent},
 ];

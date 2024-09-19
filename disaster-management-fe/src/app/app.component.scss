@@ -3,8 +3,9 @@ nz-layout{
 }
 
 nz-sider{
-    background-color: antiquewhite;
+    height: 100%;
 }
+
 .sidebar-logo {
     position: relative;
     height: 64px;
@@ -13,3 +14,7 @@ nz-sider{
     line-height: 64px;
     transition: all .3s;
   }
+
+.pad-0{
+    padding: 0;
+}

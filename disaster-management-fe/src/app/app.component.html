@@ -1,10 +1,16 @@
 <nz-layout>
-  <nz-sider [(nzCollapsed)]="isCollapsed">
-    <div class="sidebar-logo">
-      <span style="cursor: pointer;" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" (click)="isCollapsed = !isCollapsed"></span>
-      <h1>Ant Design Of Angular</h1>
-    </div>
-    <ul nz-menu [nzInlineCollapsed]="isCollapsed">
+  <nz-header *ngIf="isHorizontal" style="height: auto; padding: 0; line-height: 40px;">
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item nzSelected nzMatchRouter [routerLink]="['/home']">Home</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/donation']">Donation</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/crisis']">Crisis</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/volunteer']">Volunteer</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/inventory']">Inventory</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/admin']">Admin</li>
+    </ul>
+  </nz-header>
+  <nz-sider *ngIf="!isHorizontal" nzTheme="light">
+    <ul nz-menu>
       <li nz-menu-item nzSelected nzMatchRouter [routerLink]="['/home']">Home</li>
       <li nz-menu-item nzMatchRouter [routerLink]="['/donation']">Donation</li>
       <li nz-menu-item nzMatchRouter [routerLink]="['/crisis']">Crisis</li>
@@ -12,6 +18,10 @@
       <li nz-menu-item nzMatchRouter [routerLink]="['/inventory']">Inventory</li>
       <li nz-menu-item nzMatchRouter [routerLink]="['/admin']">Admin</li>
     </ul>
+
+    <div style="position: absolute; bottom: 0; padding-left: 10px; padding-bottom: 5px; width: 100%;">
+      <button nz-button nzType="primary" style="margin: auto;" [routerLink]="['/login']">Log in</button>
+    </div>
   </nz-sider>
   <nz-content>
     <router-outlet></router-outlet>

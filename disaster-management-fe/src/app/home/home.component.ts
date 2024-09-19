@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'
+import { CommonModule } from '@angular/common';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { interval, Subscription } from 'rxjs';
 import { NgApexchartsModule } from "ng-apexcharts";
