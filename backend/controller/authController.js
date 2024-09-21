@@ -1,6 +1,7 @@
 const dbs = require('../config/dbs');
 const { QueryTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
+const { v4: uuidv4 } = require('uuid');
 const saltRounds = 10;
 
 module.exports = {
@@ -21,15 +22,24 @@ module.exports = {
                     },
                     type : QueryTypes.SELECT
                 });
-                //console.log(results);
 
-                // Load hash from your password DB.
-                bcrypt.compare(body.password, results.password, function(err, result) {
-                    if(result == true){
+                // Load hash from DB.
+                bcrypt.compare(body.password, results.password, async function(err, result) {
+                    if(result === true){
+                        var uuid = uuidv4();
+
+                        await dbs.query('update Users set session = :uid', {
+                            replacements : {
+                                uid : uuid
+                            },
+                            type : QueryTypes.UPDATE
+                        });
+
                         res.status(200).json({
                             id : results.id,
                             name : results.name,
-                            is_admin : results.is_admin
+                            is_admin : results.is_admin,
+                            session : uuid
                         });
                     }
                     else{
@@ -87,7 +97,12 @@ module.exports = {
     getVolunteers : async (req, res) => {
         try {
             const [results, metadata] = 
-            await dbs.query("select id, phone, name from users where is_admin = false", {
+            await dbs.query(`
+                select u.id, phone, u.name , array_agg(c.id) as assigned_crisises
+                from users u 
+                left join crisisreports c on u.id = c.user_id
+                where is_admin = false
+                group by 1, 2, 3`, {
                 type : QueryTypes.RAW,
             });
             

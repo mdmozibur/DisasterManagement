@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -8,16 +8,18 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { DatabaseService } from '../database.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-crisis',
   standalone: true,
-  imports: [NzInputModule, NzInputNumberModule, NzButtonModule, FormsModule, NzSelectModule, NzCheckboxModule, NzModalModule, NzListModule],
+  imports: [NzInputModule, NzInputNumberModule, NzButtonModule, FormsModule, NzSelectModule, NzCheckboxModule, NzModalModule, NzListModule, CommonModule],
   templateUrl: './crisis.component.html',
   styleUrl: './crisis.component.scss'
 })
 export class CrisisComponent implements OnInit{
 
+  @Input() IsNewCrisisButtonVisible = true;
   isFormValid = false;
   location : string = '';
   name : string  = '';
@@ -28,9 +30,7 @@ export class CrisisComponent implements OnInit{
   isIncidentReporting = false;
 
   data : any[] = [];
-  users : any[] = [];
   isDataLoading = true;
-  isUsersLoading = true;
 
   constructor(private dbs : DatabaseService){
 
@@ -40,10 +40,6 @@ export class CrisisComponent implements OnInit{
     var dataJson = await this.dbs.Fetch('crisis', 'get', null);
     this.data = await dataJson.json();
     this.isDataLoading = false;
-
-    dataJson = await this.dbs.Fetch('auth/volunteers', 'get', null);
-    this.users = await dataJson.json();
-    this.isUsersLoading = false;
   }
 
   checkFormValidity(){
@@ -51,10 +47,6 @@ export class CrisisComponent implements OnInit{
                        this.location.length > 4 &&
                        this.incident !== undefined &&
                        this.incident.length > 10;
-  }
-
-  assignVolunteerFor(crisis : any, user: any){
-    console.log(crisis  + " hhhh " + user);
   }
 
   async onSubmit(){

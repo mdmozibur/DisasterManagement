@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.post('/register', controller.register)
       .post('/login', controller.login)
-      .get('/volunteers', controller.getVolunteers);
+      .get('/volunteers', controller.getVolunteers)
 
 module.exports = router;

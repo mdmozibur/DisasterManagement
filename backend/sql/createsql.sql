@@ -9,7 +9,8 @@ status CRISIS_STATUS not null default 'reported',
 location varchar(250) not null,
 severity SEVERITY not null default 'low',
 name varchar(100),
-incident text not null
+incident text not null,
+user_id int references users (id) 
 );
 
 create table if not exists Donations
@@ -28,15 +29,11 @@ created_at timestamp default now() not null,
 name varchar(100) not null,
 phone char(11) not null unique,
 password varchar(250) not null,
-is_admin boolean not null default false
+is_admin boolean not null default false,
+session char(36)
 );
 
+alter table Users add session char(36)
 
-create table if not exists CrisisUser
-(
-id serial primary key,
-created_at timestamp default now() not null,
-crisis_id integer references CrisisReports (id),
-user_id integer references Users (id)
-)
- 
+
+

@@ -1,7 +1,7 @@
 <div style="padding: 4px;">   
     <div style="display: flex; justify-content: space-between; margin-top: 5px; margin-right: 5px;">
         <h1>Crisis reports</h1>
-        <button nz-button nzType="primary" (click)="isModalVisible = true">Report new crisis</button>
+        <button *ngIf="IsNewCrisisButtonVisible" nz-button nzType="primary" (click)="isModalVisible = true">Report new crisis</button>
     </div>
     
     <nz-modal [(nzVisible)]="isModalVisible" 
@@ -46,25 +46,13 @@
                 <nz-list-item-meta-description>
                     <section>{{item.incident}}</section>
                     <strong>Status : {{item.status}}</strong><br>
-                    <strong>Severity : {{item.severity}}</strong>
+                    <strong>Severity : {{item.severity}}</strong><br>
+                    <strong>Assigned : {{item.assigned}}</strong>
                 </nz-list-item-meta-description>
                 <nz-list-item-meta-title>
                     {{item.location}}
                 </nz-list-item-meta-title>
             </nz-list-item-meta>
-            <ul nz-list-item-actions>
-                <nz-list-item-action>
-                  <nz-select 
-                    style="width: 180px;"
-                    nzPlaceHolder="Assign a volunteer"
-                    (ngModelChange)="assignVolunteerFor(item, $event)"
-                    [nzLoading]="isUsersLoading">
-                    @for (usr of users; track users) {
-                        <nz-option [nzValue]="usr.id" [nzLabel]="usr.name"></nz-option>
-                    }
-                  </nz-select>
-                </nz-list-item-action>
-              </ul>
           </nz-list-item>
         }
         @if (data.length === 0) {

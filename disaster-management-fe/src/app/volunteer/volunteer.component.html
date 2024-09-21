@@ -1,3 +1,7 @@
+<div style="display: flex; justify-content: space-between; margin-top: 5px; margin-right: 5px;">
+  <h1>Volunteers</h1> 
+  <button *ngIf="ShowExtraButtons" nz-button nzType="primary" nzSize="large" [routerLink]="['/register']">Join as a volunteer</button>
+</div>
 
 <nz-list nzItemLayout="horizontal" [nzLoading]="isDataLoading">
     @for (item of data; track item) {
@@ -11,9 +15,39 @@
                 {{item.name}}
             </nz-list-item-meta-title>
         </nz-list-item-meta>
+        <ul nz-list-item-actions *ngIf="ShowExtraButtons">
+          <nz-list-item-action>
+            <a (click)="viewCrisises(item)">View assigned volunteers</a>
+          </nz-list-item-action>
+      </ul>
       </nz-list-item>
     }
     @if (data.length === 0) {
       <nz-list-empty />
     }
 </nz-list>
+
+<nz-modal [nzVisible]="isVolunteersModalOpen" [nzTitle]="'Crisis assigned to ' + clickedItem?.name" (nzOnCancel)="isVolunteersModalOpen = false" nzClosable="true" [nzFooter]="null">
+  <ng-container *nzModalContent>
+    <nz-list nzItemLayout="horizontal" [nzLoading]="isVolunteerDetailsLoading">
+      @for (item of assignedVolunteersData; track item) {
+        <nz-list-item 
+          [class.resolved-bg]="item.status === 'resolved'" 
+          [class.critical-bg]="item.severity === 'critical' && item.status !== 'resolved'"
+          style="padding-left: 10px;">
+          <nz-list-item-meta >
+              <nz-list-item-meta-description>
+                  <section><strong>Incident : </strong>{{item.incident}}</section>
+                  <strong>Status : </strong> {{item.status}}
+                  <br>
+                  <strong>Severity : </strong> {{item.severity}}
+              </nz-list-item-meta-description>
+              <nz-list-item-meta-title>
+                      {{item.location}}
+              </nz-list-item-meta-title>
+          </nz-list-item-meta>
+        </nz-list-item>
+      }
+  </nz-list>
+  </ng-container>
+</nz-modal>

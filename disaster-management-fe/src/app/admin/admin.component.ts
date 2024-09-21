@@ -21,12 +21,19 @@ export class AdminComponent implements OnInit{
   isDataLoading = true;
   crisisData : any[] = [];
 
+  users : any[] = [];
+  isUsersLoading = true;
+
   constructor(private dbs : DatabaseService){}
 
   async ngOnInit(): Promise<void> {
     var dataJson = await this.dbs.Fetch('crisis/all', 'get', null);
     this.crisisData = await dataJson.json();
     this.isDataLoading = false;
+
+    dataJson = await this.dbs.Fetch('auth/volunteers', 'get', null);
+    this.users = await dataJson.json();
+    this.isUsersLoading = false;
   }
 
   async crisisStatusChange(e : any){
@@ -34,6 +41,13 @@ export class AdminComponent implements OnInit{
       id : e.id,
       column : 'status',
       value : e.status
+    }));
+  }
+
+  async assignVolunteerFor(crisis : any, user: any){
+    var res = await this.dbs.Fetch('crisis/assign-volunteer', 'post', JSON.stringify({
+      crisis_id : crisis.id,
+      user_id : user,
     }));
   }
 

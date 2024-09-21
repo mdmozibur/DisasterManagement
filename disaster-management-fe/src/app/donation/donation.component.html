@@ -4,7 +4,7 @@
             <h1>Donations</h1> 
             <small>near real time data - refreshed every 5 second</small>
         </div>
-        <button nz-button nzType="primary" nzSize="large" (click)="isModalVisible = true" >Donate now</button>
+        <button *ngIf="IsDonateButtonVisible" nz-button nzType="primary" nzSize="large" (click)="isModalVisible = true" >Donate now</button>
     </div>
     
     <nz-modal [(nzVisible)]="isModalVisible" 
@@ -39,10 +39,10 @@
     <div>
         <nz-statistic [nzValue]="(totalDonationAmount | number)!" [nzTitle]="'Total Donation amount of all-time'"></nz-statistic>
         <apx-chart
-        [series]="chartOptions.series"
-        [chart]="chartOptions.chart"
-        [xaxis]="chartOptions.xaxis"
-        [title]="chartOptions.title"
+        [chart]="chartFundamental"
+        [title]="{text : 'Donations per day'}"
+        [xaxis]="chartXAxis"
+        [series]="chartSeries"
       ></apx-chart>
     </div>
     

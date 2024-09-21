@@ -46,8 +46,20 @@
                     {{item.location}}
             </nz-list-item-meta-title>
         </nz-list-item-meta>
-        <nz-list-item-extra>
-        </nz-list-item-extra>
+        <ul nz-list-item-actions *ngIf="item.status !== 'reported'">
+            <nz-list-item-action>
+              <nz-select 
+                style="width: 180px;"
+                nzPlaceHolder="Assign a volunteer"
+                [(ngModel)]="item.user_id"
+                (ngModelChange)="assignVolunteerFor(item, $event)"
+                [nzLoading]="isUsersLoading">
+                @for (usr of users; track users) {
+                    <nz-option [nzValue]="usr.id" [nzLabel]="usr.name"></nz-option>
+                }
+              </nz-select>
+            </nz-list-item-action>
+        </ul>
       </nz-list-item>
     }
     @if (crisisData.length === 0) {

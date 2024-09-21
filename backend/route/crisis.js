@@ -5,6 +5,8 @@ const router = express.Router();
 router.post('/', controller.post)
       .get('/', controller.getAllApproved)
       .get('/all', controller.getAll)
-      .put('/', controller.update);
+      .get('/specific', controller.getSpecific)
+      .put('/', controller.update)
+      .post('/assign-volunteer', controller.assignVolunteer)
 
 module.exports = router;
