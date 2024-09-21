@@ -26,12 +26,17 @@ create table if not exists Users
 id serial primary key,
 created_at timestamp default now() not null,
 name varchar(100) not null,
-email varchar(250) not null unique,
+phone char(11) not null unique,
 password varchar(250) not null,
 is_admin boolean not null default false
 );
 
 
-
-
+create table if not exists CrisisUser
+(
+id serial primary key,
+created_at timestamp default now() not null,
+crisis_id integer references CrisisReports (id),
+user_id integer references Users (id)
+)
  

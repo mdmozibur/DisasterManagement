@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 })
 
 export class LoginComponent {
-  email : string = '';
+  phone : string = '';
   password : string = '';
   passwordVisible = false;
   isFormValid = false;
@@ -27,23 +27,15 @@ export class LoginComponent {
   }
 
   checkFormValidity(){
-    //regex patter to check if anemail is valid from https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
-    var regexEmailValidityCheck = String(this.email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-
-    this.isFormValid = this.email != undefined &&
-      this.email.length > 3 &&
-      regexEmailValidityCheck !== undefined && regexEmailValidityCheck !== null 
-      && this.password != undefined &&
+    this.isFormValid = this.phone !== undefined &&
+      this.phone.length === 11 &&(this.phone.startsWith('013') || this.phone.startsWith('015') || this.phone.startsWith('016') || this.phone.startsWith('017') || this.phone.startsWith('018') || this.phone.startsWith('019'))
+      && this.password !== undefined &&
       this.password.length > 7;
   }
 
   async loginClick(){
     var res = await this.dbs.Fetch('auth/login', 'post', JSON.stringify({
-      email : this.email,
+      phone : this.phone,
       password : this.password
     }));
 

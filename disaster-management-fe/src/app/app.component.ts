@@ -2,7 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -25,7 +25,15 @@ export class AppComponent {
     this.isHorizontal = window.innerWidth < 600;
   }
 
-  constructor(public auths : AuthService){
+  constructor(public auths : AuthService, private activatedRoute : ActivatedRoute){
     this.onResize();  
+    this.activatedRoute.url.subscribe(async p =>{
+      //console.log(p);
+    });
+
+  }
+
+  logout(){
+    this.auths.Logout();
   }
 }

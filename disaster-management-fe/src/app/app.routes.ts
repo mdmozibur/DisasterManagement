@@ -22,9 +22,5 @@ export const routes: Routes = [
     { 
         path: 'admin', 
         component: AdminComponent,
-        // children: [
-        //     { path: 'child', component: ChildComponent },
-        //     { path: 'another-child', component: AnotherChildComponent }
-        // ]
     },
 ];

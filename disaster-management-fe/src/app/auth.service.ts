@@ -16,4 +16,10 @@ export class AuthService {
     this.isAdmin = authDetails.is_admin;
     this.name = authDetails.name;
   }
+
+  public Logout(){
+    this.name = '';
+    this.userId = -1;
+    this.isAdmin = false;
+  }
 }

@@ -6,19 +6,18 @@ const saltRounds = 10;
 module.exports = {
     login : async (req, res) => {
         let body = req.body;
-        if(!body || !body.password || !body.email){
-            res.status(500).json({
+        if(!body || !body.password || !body.phone){
+            res.status(400).json({
                 status: 'no data provided',
-                message: 'no data provided'
             });
             return;
         }
 
         try {
             const [results, metadata] = 
-                await dbs.query('select id, name, password, is_admin from Users where email = :mail', {
+                await dbs.query('select id, name, password, is_admin from Users where phone = :phn', {
                     replacements : {
-                        mail : body.email
+                        phn : body.phone
                     },
                     type : QueryTypes.SELECT
                 });
@@ -42,18 +41,17 @@ module.exports = {
                 });
         } catch (error) {
             res.status(500).json({
-                status: 'failure',
-                message: error
+                message: error.errors
             });
         }
     },
 
-    // get only the reports that has been approved by admin
     register : async (req, res) => {
         let body = req.body;
-        if(!body || !body.password || !body.email || !body.name){
-            res.status(500).json({
-                status: 'no data provided',
+
+        // if payload doesn't contain appropriate data, then return error
+        if(!body || !body.password || !body.phone || !body.name){
+            res.status(400).json({
                 message: 'no data provided'
             });
             return;
@@ -61,10 +59,10 @@ module.exports = {
 
         bcrypt.hash(body.password, saltRounds).then(async function(hash) {
             try {
-                const [results, metadata] = 
-                await dbs.query('insert into Users (email, password, name) values (:mail, :pass, :nm)', {
+                const [_, metadata] = 
+                await dbs.query('insert into Users (phone, password, name) values (:phn, :pass, :nm)', {
                     replacements : {
-                        mail : body.email,
+                        phn : body.phone,
                         pass : hash,
                         nm : body.name
                     },
@@ -80,10 +78,24 @@ module.exports = {
                     return;
                 }
                 res.status(500).json({
-                    status: 'failure',
                     message: error.message
                 });
             }
         });
-    }
+    },
+
+    getVolunteers : async (req, res) => {
+        try {
+            const [results, metadata] = 
+            await dbs.query("select id, phone, name from users where is_admin = false", {
+                type : QueryTypes.RAW,
+            });
+            
+            res.status(200).json(results);
+        } catch (error) {
+            res.status(500).json({
+                message: error
+            });;
+        }
+    },
 }

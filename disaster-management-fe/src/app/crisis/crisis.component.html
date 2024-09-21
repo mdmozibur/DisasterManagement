@@ -44,16 +44,27 @@
           <nz-list-item>
             <nz-list-item-meta >
                 <nz-list-item-meta-description>
-                    <p>{{item.incident}}</p>
+                    <section>{{item.incident}}</section>
                     <strong>Status : {{item.status}}</strong><br>
                     <strong>Severity : {{item.severity}}</strong>
                 </nz-list-item-meta-description>
                 <nz-list-item-meta-title>
-                    <strong>Location: </strong>{{item.location}}
+                    {{item.location}}
                 </nz-list-item-meta-title>
             </nz-list-item-meta>
-            <nz-list-item-extra>
-            </nz-list-item-extra>
+            <ul nz-list-item-actions>
+                <nz-list-item-action>
+                  <nz-select 
+                    style="width: 180px;"
+                    nzPlaceHolder="Assign a volunteer"
+                    (ngModelChange)="assignVolunteerFor(item, $event)"
+                    [nzLoading]="isUsersLoading">
+                    @for (usr of users; track users) {
+                        <nz-option [nzValue]="usr.id" [nzLabel]="usr.name"></nz-option>
+                    }
+                  </nz-select>
+                </nz-list-item-action>
+              </ul>
           </nz-list-item>
         }
         @if (data.length === 0) {

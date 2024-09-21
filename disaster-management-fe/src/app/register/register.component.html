@@ -8,8 +8,8 @@
       <input nz-input name="nameInput" required placeholder="John Doe" [disabled]="isRegistrationOngoing" [(ngModel)]="name" (input)="checkName()">
   </label>
     <label>
-        Email
-        <input nz-input name="emailInput" required placeholder="abc@example.com"  [disabled]="isRegistrationOngoing" [(ngModel)]="email" (input)="checkEmail()">
+        Phone
+        <input nz-input name="phoneInput" required placeholder="01818793261"  [disabled]="isRegistrationOngoing" [(ngModel)]="phone" (input)="checkPhone()">
     </label>
     <label>
         Password
@@ -66,7 +66,7 @@
 
 <div style="color: red; display: flex; flex-direction: column; width: calc(min(90%, 600px)); margin: auto ">
   <i *ngIf="!isNameValid">* Name must be at least 4 character long</i>
-  <i *ngIf="!isEmailValid">* Must be a valid email</i>
+  <i *ngIf="!isPhoneValid">* Must be a valid phone number starting with 01</i>
   <i *ngIf="!isPasswordLengthyEnough">* Password must be at least 8 character long</i>
   <i *ngIf="!isPasswordMatching">* Passwords must match</i>
 </div>

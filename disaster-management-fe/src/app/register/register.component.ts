@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent {
   name = '';
-  email = '';
+  phone = '';
   password = '';
   password2 = '';
   passwordVisible = false;
@@ -25,7 +25,7 @@ export class RegisterComponent {
   isRegistrationOngoing = false;
 
   isNameValid = false;
-  isEmailValid = false;
+  isPhoneValid = false;
   isPasswordMatching = false;
   isPasswordLengthyEnough = false;
   isFormValid = false;
@@ -35,7 +35,7 @@ export class RegisterComponent {
   }
 
   checkFormValidity(){
-    this.isFormValid = this.isNameValid && this.isEmailValid && this.isPasswordLengthyEnough && this.isPasswordMatching;
+    this.isFormValid = this.isNameValid && this.isPhoneValid && this.isPasswordLengthyEnough && this.isPasswordMatching;
   }
 
   checkName(){
@@ -43,14 +43,9 @@ export class RegisterComponent {
     this.checkFormValidity();
   }
 
-  checkEmail(){
-    //regex patter to check if anemail is valid from https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
-    var regexEmailValidityCheck = String(this.email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-    this.isEmailValid = regexEmailValidityCheck !== undefined && regexEmailValidityCheck !== null;
+  checkPhone(){
+    this.isPhoneValid = this.phone !== undefined && this.phone.length === 11 && 
+      (this.phone.startsWith('013') || this.phone.startsWith('015') || this.phone.startsWith('016') || this.phone.startsWith('017') || this.phone.startsWith('018') || this.phone.startsWith('019'));
     this.checkFormValidity();
   }
 
@@ -63,7 +58,7 @@ export class RegisterComponent {
   async registerClick(){
     this.isRegistrationOngoing = true;
     var res = await this.dbs.Fetch('auth/register', 'post', JSON.stringify({
-      email : this.email,
+      phone : this.phone,
       password : this.password,
       name : this.name
     }));
@@ -77,7 +72,7 @@ export class RegisterComponent {
       this.isRegistrationOngoing = false;
       var info = await res.json();
       if(info.errorMessage === 'email must be unique'){
-        this.alertService.error('an account with email ' + this.email + ' already exists');
+        this.alertService.error('an account with phone ' + this.phone + ' already exists');
       }
     }
   }

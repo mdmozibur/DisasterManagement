@@ -28,7 +28,9 @@ export class CrisisComponent implements OnInit{
   isIncidentReporting = false;
 
   data : any[] = [];
+  users : any[] = [];
   isDataLoading = true;
+  isUsersLoading = true;
 
   constructor(private dbs : DatabaseService){
 
@@ -38,6 +40,10 @@ export class CrisisComponent implements OnInit{
     var dataJson = await this.dbs.Fetch('crisis', 'get', null);
     this.data = await dataJson.json();
     this.isDataLoading = false;
+
+    dataJson = await this.dbs.Fetch('auth/volunteers', 'get', null);
+    this.users = await dataJson.json();
+    this.isUsersLoading = false;
   }
 
   checkFormValidity(){
@@ -45,6 +51,10 @@ export class CrisisComponent implements OnInit{
                        this.location.length > 4 &&
                        this.incident !== undefined &&
                        this.incident.length > 10;
+  }
+
+  assignVolunteerFor(crisis : any, user: any){
+    console.log(crisis  + " hhhh " + user);
   }
 
   async onSubmit(){

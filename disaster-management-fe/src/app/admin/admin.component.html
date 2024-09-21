@@ -11,17 +11,39 @@
 </ul>
 
 
-<nz-list nzItemLayout="horizontal" [nzLoading]="isDataLoading">
+<nz-list *ngIf="selectedItem === 'crisis'" nzItemLayout="horizontal" [nzLoading]="isDataLoading">
     @for (item of crisisData; track item) {
-      <nz-list-item>
+      <nz-list-item 
+        [class.resolved-bg]="item.status === 'resolved'" 
+        [class.critical-bg]="item.severity === 'critical' && item.status !== 'resolved'"
+        style="padding-left: 10px;">
         <nz-list-item-meta >
             <nz-list-item-meta-description>
-                <p>{{item.incident}}</p>
-                <strong>Status : {{item.status}}</strong><br>
-                <strong>Severity : {{item.severity}}</strong>
+                <section><strong>Incident : </strong>{{item.incident}}</section>
+                <strong>Status : </strong> 
+
+                <!-- only allow editing status for non-resolved incidents -->
+                @if (item.status === 'resolved') {
+                    Resolved
+                }
+                @else {
+                    <nz-select name="statusInput" [(ngModel)]="item.status" nzSize="small" style="margin-left: 12.5px; width: 105px;" (ngModelChange)="crisisStatusChange(item)">
+                        <nz-option nzValue="reported" nzLabel="Reported"></nz-option>
+                        <nz-option nzValue="checking" nzLabel="Checking"></nz-option>
+                        <nz-option nzValue="responding" nzLabel="Responding"></nz-option>
+                        <nz-option nzValue="resolved" nzLabel="Resolved"></nz-option>
+                    </nz-select>
+                }
+                <br>
+                <strong>Severity : </strong>
+                <nz-select name="severityInput" [(ngModel)]="item.severity" nzSize="small" style="width: 105px;" (ngModelChange)="crisisSeverityChange(item)">
+                    <nz-option nzValue="low" nzLabel="Low"></nz-option>
+                    <nz-option nzValue="moderate" nzLabel="Moderate"></nz-option>
+                    <nz-option nzValue="critical" nzLabel="Critical"></nz-option>
+                </nz-select>
             </nz-list-item-meta-description>
             <nz-list-item-meta-title>
-                <strong>Location: </strong>{{item.location}}
+                    {{item.location}}
             </nz-list-item-meta-title>
         </nz-list-item-meta>
         <nz-list-item-extra>
