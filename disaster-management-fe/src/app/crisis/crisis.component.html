@@ -1,27 +1,62 @@
-<div >
-    <form class="vertical-stackpanel" style="width: 98%; margin: auto" method="post" (ngSubmit)="onSubmit()">
-        <h1>Report a crisis.</h1>
-        <label nz-checkbox name="anonymousCheckBox" [(ngModel)]="isAnonymousReport">Report Anonymously</label>
-        <label>
-            Location *
-            <input nz-input name="amountInput" required placeholder="Enter the location" [(ngModel)]="location" (input)="checkFormValidity()">
-        </label>
-        <label for="severityInput">
-            Severity
-        </label>
-        <nz-select style="width: 100%;" name="severityInput" [(ngModel)]="severity">
-            <nz-option nzValue="low" nzLabel="Low"></nz-option>
-            <nz-option nzValue="moderate" nzLabel="Moderate"></nz-option>
-            <nz-option nzValue="critical" nzLabel="Critical"></nz-option>
-        </nz-select>
-        <label>
-            Your Name
-            <input nz-input placeholder="Your name" [disabled]="isAnonymousReport" required name="nameInput" [(ngModel)]="name">
-        </label>
-        <label>
-            Incident *
-            <textarea nz-input placeholder="describe the incident" name="incidentInput" [(ngModel)]="incident" (input)="checkFormValidity()"></textarea>
-        </label>
-        <button type="submit" [nzType]="'primary'" nz-button [disabled]="!isFormValid">Submit</button>
-    </form>
+<div style="padding: 4px;">   
+    <div style="display: flex; justify-content: space-between; margin-top: 5px; margin-right: 5px;">
+        <h1>Crisis reports</h1>
+        <button *ngIf="IsNewCrisisButtonVisible" nz-button nzType="primary" (click)="isModalVisible = true">Report new crisis</button>
+    </div>
+    
+    <nz-modal [(nzVisible)]="isModalVisible" 
+              nzTitle="The first Modal" 
+              [nzOkDisabled]="!isFormValid" 
+              [nzOkLoading]="isIncidentReporting"
+              (nzOnCancel)="isModalVisible = false" 
+              nzOkText="Sumbit"
+              nzOkDanger="false"
+              (nzOnOk)="onSubmit()">
+        <ng-container *nzModalContent>
+            <form class="vertical-stackpanel" style="width: 98%; margin: auto" method="post">
+                <label nz-checkbox name="anonymousCheckBox" [(ngModel)]="isAnonymousReport">Report Anonymously</label>
+                <label>
+                    Location *
+                    <input nz-input name="amountInput" required placeholder="Enter the location" [(ngModel)]="location" (input)="checkFormValidity()">
+                </label>
+                <label for="severityInput">
+                    Severity
+                </label>
+                <nz-select style="width: 100%;" name="severityInput" [(ngModel)]="severity">
+                    <nz-option nzValue="low" nzLabel="Low"></nz-option>
+                    <nz-option nzValue="moderate" nzLabel="Moderate"></nz-option>
+                    <nz-option nzValue="critical" nzLabel="Critical"></nz-option>
+                </nz-select>
+                <label>
+                    Your Name
+                    <input nz-input placeholder="Your name" [disabled]="isAnonymousReport" required name="nameInput" [(ngModel)]="name">
+                </label>
+                <label>
+                    Incident *
+                    <textarea nz-input placeholder="describe the incident" name="incidentInput" [(ngModel)]="incident" (input)="checkFormValidity()"></textarea>
+                </label>
+            </form>
+        </ng-container>
+    </nz-modal>
+    
+    <nz-list nzItemLayout="horizontal" [nzLoading]="isDataLoading">
+        @for (item of data; track item) {
+          <nz-list-item>
+            <nz-list-item-meta >
+                <nz-list-item-meta-description>
+                    <section>{{item.incident}}</section>
+                    <strong>Status : {{item.user_id === undefined ? 'reported' : item.is_resolved ? 'resolved' : 'responding'}}</strong><br>
+                    <strong>Severity : {{item.severity}}</strong><br>
+                    <strong>Assigned : {{item.assigned}}</strong>
+                </nz-list-item-meta-description>
+                <nz-list-item-meta-title>
+                    {{item.location}}
+                </nz-list-item-meta-title>
+            </nz-list-item-meta>
+          </nz-list-item>
+        }
+        @if (data.length === 0) {
+          <nz-list-empty />
+        }
+    </nz-list>
 </div> 

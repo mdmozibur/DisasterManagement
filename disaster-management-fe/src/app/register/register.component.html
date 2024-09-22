@@ -1,1 +1,72 @@
-<p>register works!</p>
+
+<form class="vertical-stackpanel" style="width: calc(min(90%, 600px)); margin: auto" method="post">
+    <h2>Sign up</h2>    
+    <label>
+      <div style="display: flex; justify-content: space-between;">
+          Name * <small><i>   {{name.length}} / 4</i></small>
+      </div>
+      <input nz-input name="nameInput" required placeholder="John Doe" [disabled]="isRegistrationOngoing" [(ngModel)]="name" (input)="checkName()">
+  </label>
+    <label>
+        Phone
+        <input nz-input name="phoneInput" required placeholder="01818793261"  [disabled]="isRegistrationOngoing" [(ngModel)]="phone" (input)="checkPhone()">
+    </label>
+    <label>
+        Password
+        <nz-input-group [nzSuffix]="suffixTemplate">
+            <input
+              [type]="passwordVisible ? 'text' : 'password'"
+              nz-input
+              [disabled]="isRegistrationOngoing"
+              name="password1"
+              required
+              placeholder="input password"
+              (input)="checkPassword()"
+              [(ngModel)]="password"
+            />
+          </nz-input-group>
+          <ng-template #suffixTemplate>
+            <span
+              nz-icon
+              [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+              (click)="passwordVisible = !passwordVisible"
+            ></span>
+          </ng-template>
+    </label>
+    <label>
+        Retype password
+        <nz-input-group [nzSuffix]="suffixTemplate2">
+            <input
+              [type]="password2Visible ? 'text' : 'password'"
+              nz-input
+              [disabled]="isRegistrationOngoing"
+              name="password2"
+              required
+              (input)="checkPassword()"
+              placeholder="retype password"
+              [(ngModel)]="password2"
+            />
+          </nz-input-group>
+          <ng-template #suffixTemplate2>
+            <span
+              nz-icon
+              [nzType]="password2Visible ? 'eye-invisible' : 'eye'"
+              (click)="password2Visible = !password2Visible"
+            ></span>
+          </ng-template>
+    </label>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <p>
+            Already have an account? <a href="login">Login</a>
+        </p>
+        <button nz-button type="submit" nzType="primary" (click)="registerClick()" [disabled]="!isFormValid" [nzLoading]="isRegistrationOngoing">SignUp</button>
+    </div>
+</form>
+
+<div style="color: red; display: flex; flex-direction: column; width: calc(min(90%, 600px)); margin: auto ">
+  <i *ngIf="!isNameValid">* Name must be at least 4 character long</i>
+  <i *ngIf="!isPhoneValid">* Must be a valid phone number starting with 01</i>
+  <i *ngIf="!isPasswordLengthyEnough">* Password must be at least 8 character long</i>
+  <i *ngIf="!isPasswordMatching">* Passwords must match</i>
+</div>

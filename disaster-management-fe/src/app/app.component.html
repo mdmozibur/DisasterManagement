@@ -1,17 +1,35 @@
 <nz-layout>
-  <nz-sider [(nzCollapsed)]="isCollapsed">
-    <div class="sidebar-logo">
-      <span style="cursor: pointer;" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" (click)="isCollapsed = !isCollapsed"></span>
-      <h1>Ant Design Of Angular</h1>
-    </div>
-    <ul nz-menu [nzInlineCollapsed]="isCollapsed">
+  <nz-header *ngIf="isHorizontal" style="height: auto; padding: 0; line-height: 40px;">
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item nzSelected nzMatchRouter [routerLink]="['/home']">Home</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/donation']">Donation</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/crisis']">Crisis</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/volunteer']">Volunteer</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/inventory']">Inventory</li>
+      <li style="padding-left: 0;" nz-menu-item nzMatchRouter [routerLink]="['/admin']" *ngIf="auths.isAdmin">Admin</li>
+    </ul>
+  </nz-header>
+  <nz-sider *ngIf="!isHorizontal" nzTheme="light">
+    <ul nz-menu>
       <li nz-menu-item nzSelected nzMatchRouter [routerLink]="['/home']">Home</li>
       <li nz-menu-item nzMatchRouter [routerLink]="['/donation']">Donation</li>
       <li nz-menu-item nzMatchRouter [routerLink]="['/crisis']">Crisis</li>
       <li nz-menu-item nzMatchRouter [routerLink]="['/volunteer']">Volunteer</li>
-      <li nz-menu-item nzMatchRouter [routerLink]="['/inventory']">Inventory</li>
-      <li nz-menu-item nzMatchRouter [routerLink]="['/admin']">Admin</li>
+      <li *ngIf="auths.userId" nz-menu-item nzMatchRouter [routerLink]="['/inventory']">Inventory</li>
+      <li *ngIf="auths.isAdmin" nz-menu-item nzMatchRouter [routerLink]="['/admin']">Admin</li>
     </ul>
+    @if (auths.userId < 1) {
+      <div class="auth-section">
+        <a style="margin: auto;" href="login">Log in</a> or <a style="margin: auto;" href="register">Join as a volunteer</a>
+      </div>
+    }
+    @else {
+      <div class="auth-section">
+        Logged in as {{auths.name}}. <br> 
+        <a href="profile">Profile</a>
+        <a (click)="logout()">Logout</a>
+      </div>
+    }
   </nz-sider>
   <nz-content>
     <router-outlet></router-outlet>

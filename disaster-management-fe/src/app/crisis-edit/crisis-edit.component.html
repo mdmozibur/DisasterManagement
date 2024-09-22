@@ -1,0 +1,96 @@
+
+<div *ngIf="IsHeaderVisible" style="display: flex; justify-content: space-between; margin-top: 5px; margin-right: 5px;">
+  <h1>Crisis reports</h1>
+  <button *ngIf="IsNewCrisisButtonVisible" nz-button nzType="primary" (click)="isModalVisible = true">Report new crisis</button>
+</div>
+
+<nz-list nzItemLayout="horizontal" [nzLoading]="isDataLoading">
+    @for (item of crisisData; track item.id) {
+      <nz-list-item 
+        [class.resolved-bg]="item.status === 'resolved'" 
+        [class.critical-bg]="item.severity === 'critical' && item.status !== 'resolved'"
+        style="padding-left: 10px;">
+        <nz-list-item-meta >
+            <nz-list-item-meta-description>
+                <section><strong>Incident : </strong>{{item.incident}}</section>
+                
+                <!-- status is a derived value -->
+                <strong>Status : </strong> {{item.user_id == undefined ? 'reported' : (item.is_resolved ? 'resolved' : 'responding')}}
+                <br>
+                <strong>Severity : </strong>
+                @if (ShowEditOptions) {
+                  <nz-select name="severityInput" [(ngModel)]="item.severity" nzSize="small" style="width: 105px;" (ngModelChange)="crisisSeverityChange(item)">
+                    <nz-option nzValue="low" nzLabel="Low"></nz-option>
+                    <nz-option nzValue="moderate" nzLabel="Moderate"></nz-option>
+                    <nz-option nzValue="critical" nzLabel="Critical"></nz-option>
+                  </nz-select>
+                }
+                @else {
+                  {{item.severity}}
+                }
+            </nz-list-item-meta-description>
+            <nz-list-item-meta-title>
+              Crisis {{item.id}} : {{item.location}}
+            </nz-list-item-meta-title>
+        </nz-list-item-meta>
+        <ul nz-list-item-actions *ngIf="item.user_id != undefined">
+          @if (ShowEditOptions) {
+            <nz-list-item-action>
+              <nz-select 
+                style="width: 180px;"
+                nzPlaceHolder="Assign a volunteer"
+                [(ngModel)]="item.user_id"
+                (ngModelChange)="assignVolunteerFor(item, $event)"
+                [nzLoading]="isUsersLoading">
+                @for (usr of users; track users) {
+                    <nz-option [nzValue]="usr.id" [nzLabel]="usr.name"></nz-option>
+                }
+              </nz-select>
+            </nz-list-item-action>
+          }
+          @else if(users && users.length > 0 && item.user_id){
+            <nz-list-item-action>Assigned : {{getUserName(item.user_id)}}</nz-list-item-action>
+          }
+        </ul>
+      </nz-list-item>
+    }
+    @if (crisisData.length === 0) {
+      <nz-list-empty />
+    }
+</nz-list>
+
+
+<nz-modal [(nzVisible)]="isModalVisible" *ngIf="IsNewCrisisButtonVisible && IsHeaderVisible"
+  nzTitle="The first Modal" 
+  [nzOkDisabled]="!isFormValid" 
+  [nzOkLoading]="isIncidentReporting"
+  (nzOnCancel)="isModalVisible = false" 
+  nzOkText="Sumbit"
+  nzOkDanger="false"
+  (nzOnOk)="onSubmit()">
+  <ng-container *nzModalContent>
+  <form class="vertical-stackpanel" style="width: 98%; margin: auto" method="post">
+    <label nz-checkbox name="anonymousCheckBox" [(ngModel)]="isAnonymousReport">Report Anonymously</label>
+    <label>
+        Location *
+        <input nz-input name="amountInput" required placeholder="Enter the location" [(ngModel)]="location" (input)="checkFormValidity()">
+    </label>
+    <label for="severityInput">
+        Severity
+    </label>
+    <nz-select style="width: 100%;" name="severityInput" [(ngModel)]="severity">
+        <nz-option nzValue="low" nzLabel="Low"></nz-option>
+        <nz-option nzValue="moderate" nzLabel="Moderate"></nz-option>
+        <nz-option nzValue="critical" nzLabel="Critical"></nz-option>
+    </nz-select>
+    <label>
+        Your Name
+        <input nz-input placeholder="Your name" [disabled]="isAnonymousReport" required name="nameInput" [(ngModel)]="name">
+    </label>
+    <label>
+        Incident *
+        <textarea nz-input placeholder="describe the incident" name="incidentInput" [(ngModel)]="incident" (input)="checkFormValidity()"></textarea>
+    </label>
+  </form>
+  </ng-container>
+</nz-modal>

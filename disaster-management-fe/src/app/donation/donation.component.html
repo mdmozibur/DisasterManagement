@@ -1,20 +1,49 @@
-<div class="center-div">
-    <form class="vertical-stackpanel" method="post" onsubmit="donateSubmit()">
-        <h1>Donate now, save lives.</h1>
-        <label>
-            Amount *
-            <nz-input-number-group nzPrefix="৳" style="width: 100%">
-              <nz-input-number name="amountInput" required [nzStep]="10" nzMin="10" nzPlaceHolder="Enter the donation amount" [(ngModel)]="amount" (change)="checkFormValidity()"></nz-input-number>
-            </nz-input-number-group>
-        </label>
-        <label>
-            Name *
-            <input nz-input placeholder="Your name" required name="nameInput" [(ngModel)]="name" (input)="checkFormValidity()">
-        </label>
-        <label>
-            Address
-            <input nz-input placeholder="Your address" name="nameInput" [(ngModel)]="address">
-        </label>
-        <button type="submit" [nzType]="'primary'" nz-button [disabled]="!isFormValid">Donate</button>
-    </form>
+<div style="padding: 4px;">
+    <div style="display: flex; justify-content: space-between; margin-top: 5px; margin-right: 5px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <h1>Donations</h1> 
+            <small>near real time data - refreshed every 5 second</small>
+        </div>
+        <button *ngIf="IsDonateButtonVisible" nz-button nzType="primary" nzSize="large" (click)="isModalVisible = true" >Donate now</button>
+    </div>
+    
+    <nz-modal [(nzVisible)]="isModalVisible" 
+        nzTitle="The first Modal" 
+        [nzOkDisabled]="!isFormValid" 
+        (nzOnCancel)="isModalVisible = false" 
+        nzOkText="Donate"
+        nzOkDanger="false"
+        (nzOnOk)="donateSubmit()">
+        <ng-container *nzModalContent>
+            <form class="vertical-stackpanel" method="post">
+                <label>
+                    Amount *
+                    <nz-input-number-group nzPrefix="৳" style="width: 100%">
+                    <nz-input-number name="amountInput" required [nzStep]="10" nzMin="10" nzPlaceHolder="Enter the donation amount" [(ngModel)]="amount" (change)="checkFormValidity()"></nz-input-number>
+                    </nz-input-number-group>
+                </label>
+                <label>
+                    <div style="display: flex; justify-content: space-between;">
+                        Name * <small><i>   {{name?.length ?? '0'}} / 4</i></small>
+                    </div>
+                    <input nz-input placeholder="Your name" required name="nameInput" [(ngModel)]="name" (input)="checkFormValidity()">
+                </label>
+                <label>
+                    Address
+                    <input nz-input placeholder="Your address" name="nameInput" [(ngModel)]="address">
+                </label>
+            </form>
+        </ng-container>
+    </nz-modal>
+
+    <div>
+        <nz-statistic [nzValue]="(totalDonationAmount | number)!" [nzTitle]="'Total Donation amount of all-time'"></nz-statistic>
+        <apx-chart
+        [chart]="chartFundamental"
+        [title]="{text : 'Donations per day'}"
+        [xaxis]="chartXAxis"
+        [series]="chartSeries"
+      ></apx-chart>
+    </div>
+    
 </div>

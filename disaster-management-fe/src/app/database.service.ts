@@ -17,7 +17,7 @@ export class DatabaseService {
 
   }
 
-  public async Fetch(endpoint : string, method : 'get' | 'post' = 'get', bdy : any) : Promise<Response>{
+  public async Fetch(endpoint : string, method : 'get' | 'post' | 'put' = 'get', bdy : any) : Promise<Response>{
     return fetch(this.hostname + endpoint, 
       { 
         method : method,

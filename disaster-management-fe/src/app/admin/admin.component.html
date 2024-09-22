@@ -1,1 +1,14 @@
-<p>admin works!</p>
+<ul nz-menu nzMode="horizontal">
+    <li nz-menu-item [nzSelected]="selectedItem === 'volunteer'" [routerLink]="['/admin/volunteer']" (click)="selectedItem = 'volunteer'">
+        Volunteer
+    </li>
+    <li nz-menu-item [nzSelected]="selectedItem === 'crisis'" [routerLink]="['/admin/crisis']" (click)="selectedItem = 'crisis'">
+        Crisis
+    </li>
+    <li nz-menu-item [routerLink]="['/admin/volunteer']">
+        Report
+    </li>
+</ul>
+
+
+<router-outlet></router-outlet>
