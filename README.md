@@ -14,9 +14,9 @@ Follow these steps to get the Db , FE and BE up and running:
 
 
 If you have followed step 3, then you can login as an admin using the following credentials:
-phone : 01818793261
-password : mysecretpassword
+- phone : 01818793261
+- password : mysecretpassword
 
 and you can login as a volunteer with the following credentials:
-phone : 01626123456
-password : turhaana
+- phone : 01626123456
+- password : turhaana
