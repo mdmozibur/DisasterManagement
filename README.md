@@ -2,7 +2,7 @@ The frontend part is done using angular and the backend part is done using Expre
 Follow these steps to get the Db , FE and BE up and running:
 
 1. First, ensure Docker Desktop is installed. Then pull the official postgres image using the command `docker pull postgres`. Run Postgres in docker with the following command:
-    `$ docker run --name postgres_db -e POSTGRES_PASSWORD=mysecretpassword -d postgres`
+    `$ docker run --name postgres_db -e POSTGRES_PASSWORD=mysecretpassword -d postgres -p 5432:5432`
 
 2. Node needs be installed in the machine which will be running frontend or backend. So before going to the next steps, ensure that node is installed.
 
