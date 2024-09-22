@@ -29,7 +29,7 @@ export class VolunteerComponent implements OnInit{
   }
 
   async ngOnInit(): Promise<void> {
-    var res = await this.dbs.Fetch('auth/volunteers', 'get', null);
+    var res = await this.dbs.Fetch('user/volunteers', 'post', null);
     this.data = await res.json();
     this.isDataLoading = false;
   }

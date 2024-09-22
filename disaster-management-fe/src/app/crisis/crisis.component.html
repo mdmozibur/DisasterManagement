@@ -45,7 +45,7 @@
             <nz-list-item-meta >
                 <nz-list-item-meta-description>
                     <section>{{item.incident}}</section>
-                    <strong>Status : {{item.status}}</strong><br>
+                    <strong>Status : {{item.user_id === undefined ? 'reported' : item.is_resolved ? 'resolved' : 'responding'}}</strong><br>
                     <strong>Severity : {{item.severity}}</strong><br>
                     <strong>Assigned : {{item.assigned}}</strong>
                 </nz-list-item-meta-description>

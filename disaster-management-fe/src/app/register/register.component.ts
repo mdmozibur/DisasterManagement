@@ -64,7 +64,7 @@ export class RegisterComponent {
     }));
 
     if(res.ok){
-      this.alertService.success('Registration successful! Taking you to login page...');
+      this.alertService.success('Registration successful! Once an admin verifies your information, you can log in');
       await new Promise(r => setTimeout(r, 1000));
       this.router.navigateByUrl('login');
     }

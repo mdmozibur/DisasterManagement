@@ -5,6 +5,34 @@ const { v4: uuidv4 } = require('uuid');
 const saltRounds = 10;
 
 module.exports = {
+    checkToken : async (token, _) => {
+        var ret = {
+            is_valid : false,
+            is_admin : false
+        }
+
+        if(!token)
+            return ret;
+
+        try {
+            const [results, metadata] = 
+            await dbs.query('select id, is_admin from Users where session = :tkn', {
+                replacements : {
+                    tkn : token
+                },
+                type : QueryTypes.SELECT
+            });
+            
+            if(results && results.id && results.is_admin){
+                ret.is_valid = true;
+                ret.is_admin = results.is_admin;
+            }
+        } catch (error) {
+            return ret;
+        }
+        return ret;
+    },
+
     login : async (req, res) => {
         let body = req.body;
         if(!body || !body.password || !body.phone){
@@ -16,7 +44,7 @@ module.exports = {
 
         try {
             const [results, metadata] = 
-                await dbs.query('select id, name, password, is_admin from Users where phone = :phn', {
+                await dbs.query('select id, name, password, is_admin from Users where phone = :phn and is_Verified = true', {
                     replacements : {
                         phn : body.phone
                     },
@@ -28,9 +56,10 @@ module.exports = {
                     if(result === true){
                         var uuid = uuidv4();
 
-                        await dbs.query('update Users set session = :uid', {
+                        await dbs.query('update Users set session = :tkn where id = :uid', {
                             replacements : {
-                                uid : uuid
+                                tkn : uuid,
+                                uid : results.id
                             },
                             type : QueryTypes.UPDATE
                         });
@@ -92,25 +121,5 @@ module.exports = {
                 });
             }
         });
-    },
-
-    getVolunteers : async (req, res) => {
-        try {
-            const [results, metadata] = 
-            await dbs.query(`
-                select u.id, phone, u.name , array_agg(c.id) as assigned_crisises
-                from users u 
-                left join crisisreports c on u.id = c.user_id
-                where is_admin = false
-                group by 1, 2, 3`, {
-                type : QueryTypes.RAW,
-            });
-            
-            res.status(200).json(results);
-        } catch (error) {
-            res.status(500).json({
-                message: error
-            });;
-        }
     },
 }

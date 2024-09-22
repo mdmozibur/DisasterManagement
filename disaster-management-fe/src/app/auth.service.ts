@@ -24,6 +24,7 @@ export class AuthService {
     this.isAdmin = authDetails.is_admin;
     this.name = authDetails.name;
     this.session = authDetails.session;
+    sessionStorage.removeItem("user");
     sessionStorage.setItem("user", JSON.stringify(authDetails));
   }
 

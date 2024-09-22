@@ -1,61 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {NzMenuModule } from 'ng-zorro-antd/menu';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzListModule } from 'ng-zorro-antd/list';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { DatabaseService } from '../database.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { filter } from 'rxjs';
+import { VolunteerEditComponent } from '../volunteer-edit/volunteer-edit.component';
+import { CrisisEditComponent } from '../crisis-edit/crisis-edit.component';
 
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [NzMenuModule, NzListModule, CommonModule, NzButtonModule, NzSelectModule, FormsModule],
+  imports: [NzMenuModule, CommonModule, RouterModule],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'
 })
-export class AdminComponent implements OnInit{
+export class AdminComponent {
 
   selectedItem : 'volunteer' | 'crisis' | 'report' = 'volunteer';
-  isDataLoading = true;
-  crisisData : any[] = [];
+  
+  constructor(private router : Router, private activatedRoute: ActivatedRoute){
 
-  users : any[] = [];
-  isUsersLoading = true;
+    //in case of the url changes manually, need to load correct ui
+    router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(e =>{
+      if(!e.url.startsWith('/admin'))
+        return;
 
-  constructor(private dbs : DatabaseService){}
+      let curComp = this.activatedRoute.firstChild?.snapshot.component;
+      
+      if(e.url.endsWith('volunteer') && !(curComp instanceof VolunteerEditComponent)){
+        this.selectedItem = 'volunteer';
+        router.navigateByUrl('admin/volunteer');
+      }
+      
+      else if(e.url.endsWith('crisis') && !(curComp instanceof CrisisEditComponent)){
+        this.selectedItem = 'crisis';
+        router.navigateByUrl('admin/crisis');
+      }
 
-  async ngOnInit(): Promise<void> {
-    var dataJson = await this.dbs.Fetch('crisis/all', 'get', null);
-    this.crisisData = await dataJson.json();
-    this.isDataLoading = false;
-
-    dataJson = await this.dbs.Fetch('auth/volunteers', 'get', null);
-    this.users = await dataJson.json();
-    this.isUsersLoading = false;
+    })
   }
 
-  async crisisStatusChange(e : any){
-    var res = await this.dbs.Fetch('crisis', 'put', JSON.stringify({
-      id : e.id,
-      column : 'status',
-      value : e.status
-    }));
-  }
-
-  async assignVolunteerFor(crisis : any, user: any){
-    var res = await this.dbs.Fetch('crisis/assign-volunteer', 'post', JSON.stringify({
-      crisis_id : crisis.id,
-      user_id : user,
-    }));
-  }
-
-  crisisSeverityChange(e : any){
-    this.dbs.Fetch('crisis', 'put', JSON.stringify({
-      id : e.id,
-      column : 'severity',
-      value : e.severity
-    }));
-  }
 }

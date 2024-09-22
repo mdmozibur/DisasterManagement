@@ -38,10 +38,10 @@ module.exports = {
         try {
             const [results, metadata] = 
             await dbs.query(`
-                Select c.id, location, severity, status, incident , u.name as assigned
+                Select c.id, location, severity, incident , user_id as volunteer_id, u.name as assigned, is_resolved
                 from CrisisReports c 
                 left join users u on c.user_id = u.id 
-                where c.status != 'reported'`, {
+                where c.user_id is not null`, {
                 type : QueryTypes.RAW
             });
             
@@ -54,11 +54,11 @@ module.exports = {
         }
     },
 
-    // get only the reports that has been approved by admin
+    // get all
     getAll : async (req, res) => {
         try {
             const [results, metadata] = 
-            await dbs.query("Select id, location, severity, status, incident, user_id from CrisisReports", {
+            await dbs.query("Select id, location, severity, is_resolved, incident, user_id from CrisisReports", {
                 type : QueryTypes.RAW
             });
             
@@ -110,16 +110,15 @@ module.exports = {
     update : async (req, res) => {
         let body = req.body;
         if(!body || !body.column || !body.value || !body.id){
-            res.status(500).json({
-                status: 'no data provided',
+            res.status(400).json({
                 message: 'no data provided'
             });
             return;
         }
 
-        // will only allow updating status column and severity column
-        if(body.column !== 'status' && body.column !== 'severity'){
-            res.status(401).json({
+        // will only allow updating is_resolved column and severity column
+        if(body.column !== 'is_resolved' && body.column !== 'severity'){
+            res.status(400).json({
                 info: 'wrong column',
             });
 

@@ -1,1 +1,31 @@
-<p>inventory works!</p>
+<div style="display: flex; justify-content: space-between; margin-top: 5px; margin-right: 5px; margin-left: 5px;">
+    <h1>Available inventory</h1>
+    @if (isBalanceUpdated) {
+        <h3>Balance : {{balance}} Taka</h3>
+    }
+
+</div>
+
+<div style="padding: 5px; display: flex; gap: 10px; flex-direction: column;">
+    @for (item of inventoryData; track $index) {
+        <div>
+            Product : {{item.product_name}} <br>
+            Available : {{item.available_qantity}} quantity <br>
+            <button nz-button nzType="primary" (click)="handlePurchaseButtonClick(item)">Purchase</button>
+        </div>
+    }
+</div>
+
+<nz-modal [nzVisible]="isPurchaseModalOpen" [nzTitle]="'Purchase ' + purchaseClickedForItem?.product_name" 
+        (nzOnCancel)="isPurchaseModalOpen = false" nzClosable="true" [nzOkText]="'Purchase'"
+        [nzOkLoading]="isPurchaseOngoing"
+        (nzOnOk)="confirmnPurchase()">
+    <ng-container *nzModalContent>
+        <label>
+            Quantity :
+            <nz-input-number [(ngModel)]="purchaseQty" [nzMin]="1" [nzMax]="20" [nzStep]="1"></nz-input-number>
+            <br>
+            Expense incurred: {{purchaseClickedForItem.unit_price * purchaseQty}} taka
+        </label>
+    </ng-container>
+  </nz-modal>

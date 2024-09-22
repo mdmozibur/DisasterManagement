@@ -5,11 +5,9 @@ module.exports = {
     post : async (req, res) => {
         let body = req.body;
         if(!body){
-            console.log('no data provided for donate route');
-            res.status(500).json({
-                status: 'no data provided',
+            res.status(400).json({
                 message: 'no data provided'
-            });;
+            });
             return;
         }
 
@@ -30,7 +28,7 @@ module.exports = {
             res.status(500).json({
                 status: 'failure',
                 message: error
-            });;
+            });
         }
     },
 
@@ -46,7 +44,7 @@ module.exports = {
             res.status(500).json({
                 status: 'failure',
                 message: error
-            });;
+            });
         }
     },
     
@@ -62,7 +60,7 @@ module.exports = {
             res.status(500).json({
                 status: 'failure',
                 message: error
-            });;
+            });
         }
     },
 
@@ -78,7 +76,7 @@ module.exports = {
             res.status(500).json({
                 status: 'failure',
                 message: error
-            });;
+            });
         }
     },
 }
