@@ -4,7 +4,6 @@ const { QueryTypes } = require('sequelize');
 
 module.exports = {
     getVolunteers : async (req, res) => {
-        console.log(req.body);
         var authResult = await authController.checkToken(req.body.token);
 
         try {

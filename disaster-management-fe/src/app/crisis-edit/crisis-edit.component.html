@@ -49,7 +49,7 @@
             </nz-list-item-action>
           }
           @else if(users && users.length > 0 && item.user_id){
-            <nz-list-item-action>Assigned : {{getUserName(item.user_id)}}</nz-list-item-action>
+            <nz-list-item-action>Assigned : {{item.user_id}} {{getUserName(item.user_id)}}</nz-list-item-action>
           }
         </ul>
       </nz-list-item>

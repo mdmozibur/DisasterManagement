@@ -1,8 +1,9 @@
 INSERT INTO public.users (created_at,"name",phone,"password",is_admin,"session",is_verified) VALUES
-	 ('2024-09-21 13:22:49.573814','Turhaan','01626123456','$2b$10$6orDgCm3KYsl79f9ND.OqOrPztst7D8lbJebPaVT49cgpFzaODi6O',false,NULL,true),
+	 ('2024-09-20 10:52:05.670488','mozib','01818793261','$2b$10$iLIzfS4PdEUYLoveB0PKVuupvl/CxIjge05OdmibxobS44gFB.hKy',true,'1665b735-9078-4224-ac9e-e9924b470b1a',true)
 	 ('2024-09-20 10:56:49.829412','Anika Anjum','01787804488','$2b$10$WKGV0kPE6DiBqmPfNjB45O95E/BGUc.BZeg2IVd9WXUGDP9pfpivK',false,NULL,true),
+	 ('2024-09-21 13:22:49.573814','Turhaan','01626123456','$2b$10$6orDgCm3KYsl79f9ND.OqOrPztst7D8lbJebPaVT49cgpFzaODi6O',false,NULL,true),
 	 ('2024-09-22 04:13:10.082612','Baraka','01818793262','$2b$10$SH9a1AFO2PJ5xkRIHcnvoe2A54Nbm9ZVjUO.A/pmrt0pPmEsmKY3O',false,NULL,false),
-	 ('2024-09-20 10:52:05.670488','mozib','01818793261','$2b$10$iLIzfS4PdEUYLoveB0PKVuupvl/CxIjge05OdmibxobS44gFB.hKy',true,'1665b735-9078-4224-ac9e-e9924b470b1a',true);
+	 ;
 
 INSERT INTO public.crisisreports (created_at,"location","severity","name",incident,user_id,is_resolved) VALUES
 	 ('2024-09-18 08:17:17.399797','Palisara','moderate'::public."severity",NULL,'Flood affected people are starving for food',2,false),

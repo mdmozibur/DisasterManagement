@@ -1,8 +1,20 @@
 const dbs = require('../config/dbs');
 const { QueryTypes } = require('sequelize');
+const authController = require('./authController');
+
+// only logged in users will be able to access this endpoint
 
 module.exports = {
     get : async (req, res) => {
+        var authResult = await authController.checkToken(req.body.token);
+
+        if(!authResult.is_valid){
+            res.status(401).json({
+                message: 'Not authorized'
+            });
+            return;
+        }
+        
         try {
             const [results, metadata] = 
             await dbs.query('select id, product_name, available_qantity, unit_price from inventory', {
@@ -19,6 +31,15 @@ module.exports = {
     },
 
     getDaywiseExpense : async (req, res) => {
+        var authResult = await authController.checkToken(req.body.token);
+
+        if(!authResult.is_valid){
+            res.status(401).json({
+                message: 'Not authorized'
+            });
+            return;
+        }
+        
         try {
             const [results, metadata] = 
             await dbs.query(`
@@ -38,6 +59,15 @@ module.exports = {
     },
 
     getAvailableBalance : async (req, res) => {
+        var authResult = await authController.checkToken(req.body.token);
+
+        if(!authResult.is_valid){
+            res.status(401).json({
+                message: 'Not authorized'
+            });
+            return;
+        }
+        
         try {
             const [results, metadata] = 
             await dbs.query(`select donated - expense as balance
@@ -62,6 +92,15 @@ module.exports = {
     },
 
     purchase : async (req, res) => {
+        var authResult = await authController.checkToken(req.body.token);
+
+        if(!authResult.is_valid){
+            res.status(401).json({
+                message: 'Not authorized'
+            });
+            return;
+        }
+        
         let body = req.body;
         product = Number(body.product);
         qty = Number(body.qty);

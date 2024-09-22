@@ -15,7 +15,7 @@
       <li nz-menu-item nzMatchRouter [routerLink]="['/donation']">Donation</li>
       <li nz-menu-item nzMatchRouter [routerLink]="['/crisis']">Crisis</li>
       <li nz-menu-item nzMatchRouter [routerLink]="['/volunteer']">Volunteer</li>
-      <li *ngIf="auths.userId" nz-menu-item nzMatchRouter [routerLink]="['/inventory']">Inventory</li>
+      <li *ngIf="auths.userId && auths.userId > 0" nz-menu-item nzMatchRouter [routerLink]="['/inventory']">Inventory</li>
       <li *ngIf="auths.isAdmin" nz-menu-item nzMatchRouter [routerLink]="['/admin']">Admin</li>
     </ul>
     @if (auths.userId < 1) {

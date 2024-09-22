@@ -1,12 +1,12 @@
 const dbs = require('../config/dbs');
 const { QueryTypes } = require('sequelize');
+const authController = require('./authController');
 
 module.exports = {
     post : async (req, res) => {
         let body = req.body;
         if(!body){
             res.status(500).json({
-                status: 'no data provided',
                 message: 'no data provided'
             });
             return;
@@ -33,32 +33,18 @@ module.exports = {
         }
     },
 
-    // get only the reports that has been approved by admin
-    getAllApproved : async (req, res) => {
-        try {
-            const [results, metadata] = 
-            await dbs.query(`
-                Select c.id, location, severity, incident , user_id as volunteer_id, u.name as assigned, is_resolved
-                from CrisisReports c 
-                left join users u on c.user_id = u.id 
-                where c.user_id is not null`, {
-                type : QueryTypes.RAW
-            });
-            
-            res.status(200).send(results);
-        } catch (error) {
-            res.status(500).json({
-                status: 'failure',
-                message: error
-            });
-        }
-    },
-
     // get all
     getAll : async (req, res) => {
+        console.log('rq');
+        var authResult = await authController.checkToken(req.body.token);
+        
+        var qryStr = "Select id, location, severity, is_resolved, incident, user_id from CrisisReports";
+        if(!authResult.is_admin)
+            qryStr += " where user_id is not null"
+
         try {
             const [results, metadata] = 
-            await dbs.query("Select id, location, severity, is_resolved, incident, user_id from CrisisReports", {
+            await dbs.query(qryStr, {
                 type : QueryTypes.RAW
             });
             

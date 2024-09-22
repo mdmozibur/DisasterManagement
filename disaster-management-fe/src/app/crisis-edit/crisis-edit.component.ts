@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-crisis-edit',
@@ -33,7 +34,7 @@ export class CrisisEditComponent implements OnInit{
   @Input() IsHeaderVisible = false;
   @Input() IsNewCrisisButtonVisible = false;
   
-  constructor(private dbs : DatabaseService, private route : ActivatedRoute){
+  constructor(private dbs : DatabaseService, private route : ActivatedRoute, private auths : AuthService){
    }
 
   async ngOnInit(): Promise<void> {
@@ -45,7 +46,7 @@ export class CrisisEditComponent implements OnInit{
       this.IsNewCrisisButtonVisible = data['path'] === 'root'
     });
     
-    var dataJson = await this.dbs.Fetch('crisis/all', 'get', null);
+    var dataJson = await this.dbs.Fetch('crisis/all', 'post', JSON.stringify({ token : this.auths.session }));
     this.crisisData = (await dataJson.json()).sort((x : any,y : any) => x.id - y.id);
     this.isDataLoading = false;
 

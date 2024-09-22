@@ -5,6 +5,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { FormsModule } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-inventory',
@@ -23,13 +24,16 @@ export class InventoryComponent implements OnInit{
   isBalanceUpdated = false;
   balance = 0;
 
-  constructor(private dbs : DatabaseService, private alertService : NzMessageService){}
+  constructor(private dbs : DatabaseService, private alertService : NzMessageService, private auths: AuthService){}
 
   async ngOnInit(): Promise<void> {
-    var res = await this.dbs.Fetch('inventory', 'get', null);
+    var tkn = JSON.stringify({
+      token : this.auths.session
+    });
+    var res = await this.dbs.Fetch('inventory', 'post', tkn);
     this.inventoryData = (await res.json()).sort((x : any,y: any) => x.id - y.id);
 
-    res = await this.dbs.Fetch('inventory/balance', 'get', null);
+    res = await this.dbs.Fetch('inventory/balance', 'post', tkn);
     var data = await res.json()
     this.balance = Number(data.balance);
     this.isBalanceUpdated = true;
@@ -45,7 +49,8 @@ export class InventoryComponent implements OnInit{
 
     var res = await this.dbs.Fetch('inventory/purchase', 'post', JSON.stringify({
       product : this.purchaseClickedForItem.id,
-      qty : this.purchaseQty
+      qty : this.purchaseQty,
+      token : this.auths.session
     }));
     this.isPurchaseOngoing = false;
     
